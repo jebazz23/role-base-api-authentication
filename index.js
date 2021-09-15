@@ -43,4 +43,4 @@ const startApp = async () => {
 };
 
 
-
+startApp();
