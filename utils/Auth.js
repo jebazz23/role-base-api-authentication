@@ -1,8 +1,8 @@
 const bcrypt = require('bcrypt');
-const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
+const User = require('../models/User');
 const { SECRET } = require('../config');
-
 /**
  * @DESC To register the user (ADMIN, SUPER_ADMIN, USER)
  */
@@ -50,6 +50,11 @@ const userRegister = async (userDets, role, res) => {
       })
   }
 }
+
+
+/**
+ * @DESC To Login the user (ADMIN, SUPER_ADMIN, USER)
+ */
 
 const userLogin = async (userCreds, role, res) => {
     let { username, password } = userCreds;
@@ -103,6 +108,9 @@ const userLogin = async (userCreds, role, res) => {
     }
 };
 
+/** 
+ * @DESC Passport middleware 
+ */
 
 const validateUsername = async username => {
     let user = await User.findOne({ username });
@@ -114,7 +122,10 @@ const validateEmail = async email => {
     return user ? false : true;
 };
 
+const userAuth = passport.authenticate("jwt", { session: false });
+
 module.exports = {
+    userAuth,
     userRegister,
     userLogin
 }
